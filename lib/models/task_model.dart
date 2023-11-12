@@ -1,3 +1,5 @@
+// import 'package:todo_app/models/task_type_model.dart';
+
 class TaskModel {
   String? id;
   String? title;
@@ -6,6 +8,8 @@ class TaskModel {
   String? date;
   bool? isDone;
   String? uid;
+  String? createdAt;
+  String? taskType;
 
   TaskModel({
     this.id,
@@ -15,6 +19,8 @@ class TaskModel {
     this.date,
     this.isDone,
     this.uid,
+    this.createdAt,
+    this.taskType,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) => TaskModel(
@@ -25,6 +31,8 @@ class TaskModel {
         date: json["date"],
         isDone: json["isDone"],
         uid: json["uid"],
+        createdAt: json["createdAt"],
+        taskType: json["taskType"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,5 +43,7 @@ class TaskModel {
         "date": date,
         "isDone": isDone,
         "uid": uid,
+        "createdAt": createdAt,
+        "taskType": taskType,
       };
 }

@@ -99,11 +99,33 @@ class ProfileController extends GetxController {
     return userController.stream;
   }
 
-  Future<void> getCurrentUser() async {
+  Future<UserModel?> getCurrentUser() async {
     try {
-      CollectionReference user = firebaseFirestore.collection("users");
+      final DocumentSnapshot documentSnapshot = await firebaseFirestore
+          .collection("users")
+          .doc(firebaseAuth.currentUser?.uid)
+          .get();
+
+      if (documentSnapshot.exists) {
+        return UserModel(
+          name: documentSnapshot["name"],
+          address: documentSnapshot["address"],
+          bio: documentSnapshot["bio"],
+          birthday: documentSnapshot["birthday"],
+          createdAt: documentSnapshot["createdAt"],
+          email: documentSnapshot["email"],
+          gender: documentSnapshot["gender"],
+          imageUrl: documentSnapshot["imageUrl"],
+          isAccountVip: documentSnapshot["isAccountVip"],
+          phoneNumber: documentSnapshot["phoneNumber"],
+          provider: documentSnapshot["provider"],
+          uid: documentSnapshot["uid"],
+        );
+      }
+      return null;
     } catch (e) {
       print(e);
+      return null;
     }
   }
 

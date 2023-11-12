@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:todo_app/controllers/add_task_controller.dart';
+import 'package:todo_app/controllers/task_controller.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/action_add_task.dart';
 
@@ -10,7 +10,7 @@ class AddTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AddTaskController addTaskController = Get.put(AddTaskController());
+    final TaskController taskController = Get.put(TaskController());
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -21,7 +21,7 @@ class AddTask extends StatelessWidget {
             color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
+              // mainAxisSize: MainAxisSize.max,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,6 +34,9 @@ class AddTask extends StatelessWidget {
                       ),
                       onPressed: () {
                         Get.back();
+                        taskController.taskController.value.text = "";
+                        taskController.dateController.value.text = "";
+                        taskController.imageFile.value = null;
                       },
                       icon: const Icon(
                         Icons.close,
@@ -45,7 +48,7 @@ class AddTask extends StatelessWidget {
                 Column(
                   children: [
                     Obx(
-                      () => addTaskController.imageFile.value == null
+                      () => taskController.imageFile.value == null
                           ? const SizedBox()
                           : Stack(
                               clipBehavior: Clip.none,
@@ -53,9 +56,9 @@ class AddTask extends StatelessWidget {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(15),
                                   child: Image.file(
-                                    addTaskController.imageFile.value!,
+                                    taskController.imageFile.value!,
                                     height: 300,
-                                    width: 300,
+                                    width: 350,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -65,7 +68,7 @@ class AddTask extends StatelessWidget {
                                   child: IconButton(
                                     tooltip: "Delete image",
                                     onPressed: () {
-                                      addTaskController.imageFile.value = null;
+                                      taskController.imageFile.value = null;
                                     },
                                     style: IconButton.styleFrom(
                                       backgroundColor: Colors.red.shade100,
@@ -85,7 +88,7 @@ class AddTask extends StatelessWidget {
                     ),
                     TextFormField(
                       style: const TextStyle(fontSize: 20),
-                      controller: addTaskController.taskController.value,
+                      controller: taskController.taskController.value,
                       decoration: const InputDecoration(
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -96,9 +99,85 @@ class AddTask extends StatelessWidget {
                     const SizedBox(
                       height: 35,
                     ),
+                    Row(
+                      children: [
+                        Obx(
+                          () => ChoiceChip(
+                            avatar:
+                                taskController.isSelectedPersonal.value == true
+                                    ? null
+                                    : const Icon(
+                                        Icons.radio_button_unchecked,
+                                      ),
+                            backgroundColor:
+                                Colors.cyan.shade100.withOpacity(0.2),
+                            selectedColor:
+                                Colors.cyan.shade100.withOpacity(0.2),
+                            side: const BorderSide(
+                              width: 2,
+                              color: Colors.cyan,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            label: const Text(
+                              "Personal",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.cyan,
+                              ),
+                            ),
+                            selected: taskController.isSelectedPersonal.value,
+                            onSelected: (value) {
+                              taskController.isSelectedPersonal.value = value;
+                              taskController.isSelectedBusiness.value = !value;
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 35,
+                        ),
+                        Obx(
+                          () => ChoiceChip(
+                            avatar:
+                                taskController.isSelectedBusiness.value == true
+                                    ? null
+                                    : const Icon(
+                                        Icons.radio_button_unchecked,
+                                      ),
+                            backgroundColor:
+                                Colors.purple.shade100.withOpacity(0.2),
+                            selectedColor:
+                                Colors.purple.shade100.withOpacity(0.2),
+                            side: const BorderSide(
+                                width: 2, color: Colors.purple),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            label: const Text(
+                              "Business",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.purple,
+                              ),
+                            ),
+                            selected: taskController.isSelectedBusiness.value,
+                            onSelected: (value) {
+                              taskController.isSelectedBusiness.value = value;
+                              taskController.isSelectedPersonal.value = !value;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     TextFormField(
                       readOnly: true,
-                      controller: addTaskController.dateController.value,
+                      controller: taskController.dateController.value,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -118,15 +197,8 @@ class AddTask extends StatelessWidget {
                         hintText: "Today",
                       ),
                       onTap: () {
-                        addTaskController.selectedDate(context);
+                        taskController.selectedDate(context);
                       },
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.radio_button_unchecked,
-                        color: Colors.purple,
-                      ),
                     ),
                     const SizedBox(
                       height: 15,
@@ -136,7 +208,7 @@ class AddTask extends StatelessWidget {
                         ActionAddTask(
                           icon: Icons.add_photo_alternate_outlined,
                           onPressed: () {
-                            addTaskController.selectedImage();
+                            taskController.selectedImage();
                           },
                         ),
                         ActionAddTask(
@@ -159,104 +231,16 @@ class AddTask extends StatelessWidget {
                     )
                   ],
                 ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     Get.dialog(
-                //       Dialog(
-                //         child: Obx(
-                //           () => addTaskController.isLoading.value == true
-                //               ? Container(
-                //                   width: 300,
-                //                   height: 200,
-                //                   decoration: BoxDecoration(
-                //                     color: Colors.white,
-                //                     borderRadius: BorderRadius.circular(15),
-                //                   ),
-                //                   child: const Center(
-                //                     child: Column(
-                //                       mainAxisAlignment:
-                //                           MainAxisAlignment.center,
-                //                       children: [
-                //                         CircularProgressIndicator(
-                //                           color: Colors.grey,
-                //                         ),
-                //                         SizedBox(
-                //                           height: 22,
-                //                         ),
-                //                         Text(
-                //                           "Add task loading...",
-                //                           style: TextStyle(
-                //                             fontSize: 20,
-                //                             fontWeight: FontWeight.bold,
-                //                             color: Colors.grey,
-                //                           ),
-                //                         ),
-                //                       ],
-                //                     ),
-                //                   ),
-                //                 )
-                //               : Container(
-                //                   width: 300,
-                //                   height: 200,
-                //                   decoration: BoxDecoration(
-                //                     borderRadius: BorderRadius.circular(15),
-                //                     color: Colors.green.shade100,
-                //                   ),
-                //                   child: Column(
-                //                     mainAxisAlignment: MainAxisAlignment.center,
-                //                     children: [
-                //                       Icon(
-                //                         Icons.check_circle,
-                //                         size: 45,
-                //                         color: Colors.green.shade800,
-                //                       ),
-                //                       const SizedBox(
-                //                         height: 22,
-                //                       ),
-                //                       Text(
-                //                         "Add task successfully",
-                //                         style: TextStyle(
-                //                           fontSize: 20,
-                //                           fontWeight: FontWeight.bold,
-                //                           color: Colors.green.shade800,
-                //                         ),
-                //                       ),
-                //                     ],
-                //                   ),
-                //                 ),
-                //         ),
-                //       ),
-                //     );
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     backgroundColor: Colors.purple,
-                //     foregroundColor: Colors.white,
-                //   ),
-                //   child: const Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       Text(
-                //         "Add task",
-                //         style: TextStyle(
-                //           fontSize: 20,
-                //           fontWeight: FontWeight.bold,
-                //         ),
-                //       ),
-                //       Icon(
-                //         Icons.expand_less,
-                //         size: 30,
-                //       )
-                //     ],
-                //   ),
-                // )
                 RoundedLoadingButton(
-                  controller: addTaskController.loadingButtonController.value,
+                  controller: taskController.loadingButtonController.value,
                   successColor: Colors.green,
                   onPressed: () {
-                    if (addTaskController.taskController.value.text.isEmpty) {
+                    if (taskController.taskController.value.text.isEmpty) {
+                      taskController.loadingButtonController.value.reset();
                       return showSnackbar(message: "Title task is required!");
                     }
-                    addTaskController.addTask(context);
+
+                    taskController.addTask(context);
                   },
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
