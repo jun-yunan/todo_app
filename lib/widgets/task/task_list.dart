@@ -11,39 +11,73 @@ class TaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TaskController taskController = Get.find();
-    return StreamBuilder<List<TaskModel>>(
-      stream: taskController.getTasksRealTime(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text("Something went wrong!"),
-          );
-        }
-        if (!snapshot.hasData) {
-          return const Center(
-            child: Text("No data available"),
-          );
-        }
-        List<TaskModel> tasks = snapshot.data!;
+    return Obx(() {
+      if (taskController.filterPersonal.value &&
+          taskController.filterBusiness.value == false) {
+        final List<TaskModel> taskListPeronal = taskController.taskList
+            .where((task) => task.taskType == "personal")
+            .toList();
         return ListView.builder(
           shrinkWrap: true,
-          itemCount: tasks.length,
           physics: const NeverScrollableScrollPhysics(),
+          itemCount: taskListPeronal.length,
           itemBuilder: (context, index) {
             return TaskItem(
-              taskType: tasks[index].taskType == "personal"
+              taskType: taskListPeronal[index].taskType == "personal"
                   ? TaskType.personal
                   : TaskType.business,
-              title: tasks[index].title!,
+              title: taskListPeronal[index].title ?? "",
+              id: taskListPeronal[index].id ?? "",
+              isDone: taskListPeronal[index].isDone ?? false,
+              date: taskListPeronal[index].date ?? "",
+              imageUrl: taskListPeronal[index].imageUrl ?? "",
+              subtitle: taskListPeronal[index].date ?? "",
             );
           },
         );
-      },
-    );
+      } else if (taskController.filterBusiness.value &&
+          taskController.filterPersonal.value == false) {
+        final List<TaskModel> taskListBusiness = taskController.taskList
+            .where((task) => task.taskType == "business")
+            .toList();
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: taskListBusiness.length,
+          itemBuilder: (context, index) {
+            return TaskItem(
+              taskType: taskListBusiness[index].taskType == "personal"
+                  ? TaskType.personal
+                  : TaskType.business,
+              title: taskListBusiness[index].title ?? "",
+              id: taskListBusiness[index].id ?? "",
+              isDone: taskListBusiness[index].isDone ?? false,
+              date: taskListBusiness[index].date ?? "",
+              imageUrl: taskListBusiness[index].imageUrl ?? "",
+              subtitle: taskListBusiness[index].date ?? "",
+            );
+          },
+        );
+      }
+
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: taskController.taskList.length,
+        itemBuilder: (context, index) {
+          return TaskItem(
+            taskType: taskController.taskList[index].taskType == "personal"
+                ? TaskType.personal
+                : TaskType.business,
+            title: taskController.taskList[index].title ?? "",
+            id: taskController.taskList[index].id ?? "",
+            isDone: taskController.taskList[index].isDone ?? false,
+            date: taskController.taskList[index].date ?? "",
+            imageUrl: taskController.taskList[index].imageUrl ?? "",
+            subtitle: taskController.taskList[index].date ?? "",
+          );
+        },
+      );
+    });
   }
 }

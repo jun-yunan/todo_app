@@ -5,6 +5,7 @@ import 'package:todo_app/theme/theme.dart';
 class ThemeController extends GetxController {
   final themeData = Rx<ThemeData>(lightMode);
   final isDarkMode = Rx(false);
+
   void setDarkMode(value) {
     isDarkMode.value = value;
     update();

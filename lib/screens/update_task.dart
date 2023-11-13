@@ -2,15 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:todo_app/controllers/task_controller.dart';
+import 'package:todo_app/models/task_type_model.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/action_add_task.dart';
 
-class AddTask extends StatelessWidget {
-  const AddTask({super.key});
+class UpdateTask extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+  final String date;
+  final TaskType taskType;
+  final String id;
+  const UpdateTask({
+    super.key,
+    required this.imageUrl,
+    required this.title,
+    required this.date,
+    required this.taskType,
+    required this.id,
+  });
 
   @override
   Widget build(BuildContext context) {
     final TaskController taskController = Get.put(TaskController());
+    taskController.taskController.value.text = title;
+    taskController.isSelectedPersonal.value =
+        taskType == TaskType.personal ? true : false;
+    taskController.isSelectedBusiness.value =
+        taskType == TaskType.business ? true : false;
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -20,7 +38,7 @@ class AddTask extends StatelessWidget {
           color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,58 +63,57 @@ class AddTask extends StatelessWidget {
                 ],
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Obx(
-                    () => taskController.imageFile.value == null
-                        ? const SizedBox()
-                        : Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.file(
-                                  taskController.imageFile.value!,
-                                  height: 300,
-                                  width: 350,
-                                  fit: BoxFit.cover,
+                  imageUrl.isEmpty
+                      ? const SizedBox()
+                      : Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                imageUrl,
+                                height: 300,
+                                width: 350,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              right: -20,
+                              bottom: -20,
+                              child: IconButton(
+                                tooltip: "Delete image",
+                                onPressed: () {
+                                  taskController.imageFile.value = null;
+                                },
+                                style: IconButton.styleFrom(
+                                  backgroundColor: Colors.red.shade100,
+                                ),
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 30,
                                 ),
                               ),
-                              Positioned(
-                                right: -20,
-                                bottom: -20,
-                                child: IconButton(
-                                  tooltip: "Delete image",
-                                  onPressed: () {
-                                    taskController.imageFile.value = null;
-                                  },
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Colors.red.shade100,
-                                  ),
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                    size: 30,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                  ),
+                            )
+                          ],
+                        ),
                   const SizedBox(
                     height: 25,
                   ),
-                  TextFormField(
-                    style: const TextStyle(fontSize: 20),
+                  TextField(
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
                     controller: taskController.taskController.value,
+                    maxLines: 3,
                     decoration: const InputDecoration(
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       hintText: "Enter new task ...",
                       hintStyle: TextStyle(fontSize: 20),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 35,
                   ),
                   Row(
                     children: [
@@ -167,6 +184,7 @@ class AddTask extends StatelessWidget {
                                   ? null
                                   : const Icon(
                                       Icons.radio_button_unchecked,
+                                      color: Colors.cyan,
                                     ),
                           backgroundColor:
                               Colors.cyan.shade100.withOpacity(0.2),
@@ -203,6 +221,7 @@ class AddTask extends StatelessWidget {
                                   ? null
                                   : const Icon(
                                       Icons.radio_button_unchecked,
+                                      color: Colors.purple,
                                     ),
                           backgroundColor:
                               Colors.purple.shade100.withOpacity(0.2),
@@ -244,13 +263,17 @@ class AddTask extends StatelessWidget {
                     return showSnackbar(message: "Title task is required!");
                   }
 
-                  taskController.addTask(context);
+                  taskController.updateTaskById(id).then((value) {
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      Navigator.of(context).pop();
+                    });
+                  });
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Add task",
+                      "Update Task",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

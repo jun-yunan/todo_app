@@ -7,7 +7,9 @@ import 'package:image_picker/image_picker.dart';
 enum SnackBarType { error, success }
 
 void showSnackbar(
-    {required String message, SnackBarType? type = SnackBarType.error}) {
+    {required String message,
+    SnackBarType? type = SnackBarType.error,
+    Duration? duration}) {
   switch (type) {
     case SnackBarType.success:
       Get.snackbar(
@@ -18,6 +20,7 @@ void showSnackbar(
           size: 30,
           color: Colors.green[800],
         ),
+        duration: duration ?? const Duration(seconds: 3),
         backgroundColor: Colors.green[100],
         colorText: Colors.green[800],
         messageText: Text(

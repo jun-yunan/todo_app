@@ -12,6 +12,7 @@ import 'package:todo_app/utils/utils.dart';
 
 class ProfileController extends GetxController {
   final userModel = Rx<UserModel?>(null);
+  final currentUser = Rx<UserModel?>(null);
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -39,11 +40,35 @@ class ProfileController extends GetxController {
     update();
   }
 
+  StreamSubscription? streamSubscription;
   @override
   void onInit() {
     // TODO: implement onInit
-
+    streamSubscription = getStreamCurrentUser().listen((user) {
+      currentUser.value = user;
+    });
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    streamSubscription?.cancel();
+    super.onClose();
+  }
+
+  Stream<UserModel?> getStreamCurrentUser() {
+    return firebaseFirestore
+        .collection("users")
+        .doc(firebaseAuth.currentUser?.uid)
+        .snapshots()
+        .map((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        return UserModel.fromJson(
+            documentSnapshot.data() as Map<String, dynamic>);
+      }
+      return null;
+    });
   }
 
   void setDropdownValue(String value) {

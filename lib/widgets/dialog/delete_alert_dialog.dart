@@ -60,6 +60,7 @@ class DeleteAlertDialog extends StatelessWidget {
       actions: [
         RoundedLoadingButton(
           color: Colors.red.shade600,
+          successColor: Colors.green,
           controller: taskController.loadingButtonController.value,
           onPressed: onPressed,
           child: const Row(
