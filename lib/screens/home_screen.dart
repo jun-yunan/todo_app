@@ -5,6 +5,7 @@ import 'package:todo_app/controllers/profile_controller.dart';
 import 'package:todo_app/controllers/task_controller.dart';
 import 'package:todo_app/controllers/theme_controller.dart';
 import 'package:todo_app/screens/add_task.dart';
+import 'package:todo_app/widgets/dialog/search_task_dialog.dart';
 import 'package:todo_app/widgets/home/home_body.dart';
 import 'package:todo_app/widgets/home/home_drawer.dart';
 
@@ -38,19 +39,19 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        title: Text(
-          "Todo App",
-          style: TextStyle(
-            fontSize: 20,
-            letterSpacing: 2,
-            foreground: Paint()
-              ..shader =
-                  const LinearGradient(colors: [Colors.cyan, Colors.purple])
-                      .createShader(
-                const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
-              ),
-          ),
-        ),
+        // title: Text(
+        //   "Todo App",
+        //   style: TextStyle(
+        //     fontSize: 20,
+        //     letterSpacing: 2,
+        //     foreground: Paint()
+        //       ..shader =
+        //           const LinearGradient(colors: [Colors.cyan, Colors.purple])
+        //               .createShader(
+        //         const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
+        //       ),
+        //   ),
+        // ),
         leading: IconButton(
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer();
@@ -58,16 +59,18 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(
             Icons.menu,
             size: 26,
-            color: const Color(0xFF444444).withOpacity(0.8),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.dialog(const SearchTaskDialog());
+            },
             icon: Icon(
               Icons.search,
               size: 26,
-              color: const Color(0xFF444444).withOpacity(0.8),
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           IconButton(
@@ -75,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(
               Icons.notifications_outlined,
               size: 26,
-              color: const Color(0xFF444444).withOpacity(0.8),
+              color: Theme.of(context).colorScheme.primary,
             ),
           )
         ],

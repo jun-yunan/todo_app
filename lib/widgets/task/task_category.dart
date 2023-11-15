@@ -40,7 +40,7 @@ class TaskCategory extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: taskController.filterBusiness.value
                               ? Colors.purple.shade100
-                              : Colors.white,
+                              : Theme.of(context).colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: const [
                             BoxShadow(color: Colors.black12, blurRadius: 15)
@@ -54,7 +54,9 @@ class TaskCategory extends StatelessWidget {
                           children: [
                             Obx(
                               () => Text(
-                                  "${taskController.countTaskTypeBusiness()} tasks"),
+                                "${taskController.countTaskTypeBusiness()} tasks",
+                                style: TextStyle(color: Colors.grey.shade500),
+                              ),
                             ),
                             Text(
                               "Business",
@@ -99,7 +101,7 @@ class TaskCategory extends StatelessWidget {
                       // color: Colors.white,
                       color: taskController.filterPersonal.value
                           ? Colors.cyan.shade100
-                          : Colors.white,
+                          : Theme.of(context).colorScheme.primaryContainer,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -110,7 +112,9 @@ class TaskCategory extends StatelessWidget {
                         children: [
                           Obx(
                             () => Text(
-                                "${taskController.countTaskTypePersonal()} tasks"),
+                              "${taskController.countTaskTypePersonal()} tasks",
+                              style: TextStyle(color: Colors.grey.shade500),
+                            ),
                           ),
                           Text(
                             "Personal",

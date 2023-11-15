@@ -38,149 +38,134 @@ class TaskItem extends StatelessWidget {
         const SizedBox(
           height: 15,
         ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            // if (isDone)
-            //   const Divider(
-            //     color: Colors.black87,
-            //   ),
-            ListTile(
-              subtitle: subtitle?.isEmpty == false
-                  ? Text(
-                      subtitle!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
+        ListTile(
+          subtitle: subtitle?.isEmpty == false
+              ? Text(
+                  subtitle!,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey,
+                  ),
+                )
+              : null,
+          leading: isDone
+              ? IconButton(
+                  onPressed: () {
+                    taskController.notDoneTaskById(id);
+                  },
+                  icon: Icon(
+                    Icons.check_circle,
+                    color: taskType == TaskType.personal
+                        ? Colors.cyan
+                        : Colors.purple,
+                  ),
+                )
+              : IconButton(
+                  onPressed: () {
+                    taskController.isDoneTaskById(id);
+                  },
+                  icon: Icon(
+                    Icons.radio_button_unchecked,
+                    color: taskType == TaskType.personal
+                        ? Colors.cyan
+                        : Colors.purple,
+                  ),
+                ),
+          // tileColor: isDone ? Colors.green.shade100 : Colors.white,
+          tileColor: Theme.of(context).colorScheme.primaryContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          trailing: PopupMenuButton<String>(
+            offset: const Offset(0, 45),
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<String>>[
+                PopupMenuItem<String>(
+                  onTap: () {
+                    Get.to(
+                      () => UpdateTask(
+                        id: id,
+                        date: date,
+                        imageUrl: imageUrl,
+                        taskType: taskType,
+                        title: title,
                       ),
-                    )
-                  : null,
-              // leading: Icon(
-              //   Icons.radio_button_unchecked,
-              //   size: 30,
-              //   color:
-              //       taskType == TaskType.personal ? Colors.cyan : Colors.purple,
-              // ),
-              leading: isDone
-                  ? IconButton(
-                      onPressed: () {
-                        taskController.notDoneTaskById(id);
-                      },
-                      icon: Icon(
-                        Icons.check,
-                        color: taskType == TaskType.personal
-                            ? Colors.cyan
-                            : Colors.purple,
+                    );
+                  },
+                  child: const ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text("Edit Task"),
+                  ),
+                ),
+                PopupMenuItem(
+                    onTap: () {},
+                    child: const ListTile(
+                      leading: Icon(Icons.content_copy),
+                      title: Text("Duplicate Task"),
+                    )),
+                PopupMenuItem(
+                    onTap: () {},
+                    child: const ListTile(
+                      leading: Icon(Icons.timer),
+                      title: Text("Set Reminder"),
+                    )),
+                PopupMenuItem(
+                  onTap: () {
+                    Get.dialog(
+                      DeleteAlertDialog(
+                        onPressed: () {
+                          taskController.deleteTaskById(id);
+                          Get.back();
+                        },
                       ),
-                    )
-                  : IconButton(
-                      onPressed: () {
-                        taskController.isDoneTaskById(id);
-                      },
-                      icon: Icon(
-                        Icons.radio_button_unchecked,
-                        color: taskType == TaskType.personal
-                            ? Colors.cyan
-                            : Colors.purple,
-                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.delete,
+                      color: Colors.red.shade600,
                     ),
-              tileColor: isDone ? Colors.green.shade100 : Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              trailing: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) {
-                  return <PopupMenuEntry<String>>[
-                    PopupMenuItem<String>(
-                      onTap: () {
-                        Get.dialog(
-                          DeleteAlertDialog(
-                            onPressed: () {
-                              taskController.deleteTaskById(id);
-                              Get.back();
-                            },
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.delete,
-                            size: 26,
-                            color: Colors.red.shade600,
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          Text(
-                            "Delete",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.red.shade600,
-                            ),
-                          )
-                        ],
+                    title: Text(
+                      "Delete Task",
+                      style: TextStyle(
+                        color: Colors.red.shade600,
                       ),
-                    ),
-                    PopupMenuItem<String>(
-                      onTap: () {
-                        Get.to(
-                          () => UpdateTask(
-                            id: id,
-                            date: date,
-                            imageUrl: imageUrl,
-                            taskType: taskType,
-                            title: title,
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.edit,
-                            size: 26,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          Text(
-                            "Edit",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ];
-                },
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 12),
-              title: Stack(
-                children: [
-                  Text(
-                    title,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF444444).withOpacity(0.8),
                     ),
                   ),
-                  if (isDone)
+                ),
+              ];
+            },
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 5),
+          title: isDone
+              ? Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    Positioned(
+                      left: 0,
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      color: Theme.of(context).colorScheme.primary,
+                      thickness: 1,
+                    ),
                     Positioned(
                       right: 0,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: taskType == TaskType.personal
@@ -199,12 +184,19 @@ class TaskItem extends StatelessWidget {
                         ),
                       ),
                     )
-                ],
-              ),
-              onTap: () {},
-            ),
-          ],
-        )
+                  ],
+                )
+              : Text(
+                  title,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+          onTap: () {},
+        ),
       ],
     );
   }

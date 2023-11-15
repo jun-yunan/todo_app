@@ -17,7 +17,7 @@ class AddTask extends StatelessWidget {
           padding: const EdgeInsets.all(25),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.background,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // mainAxisSize: MainAxisSize.max,
@@ -29,7 +29,6 @@ class AddTask extends StatelessWidget {
                   IconButton(
                     style: IconButton.styleFrom(
                       padding: const EdgeInsets.all(10),
-                      backgroundColor: Colors.grey.shade200,
                     ),
                     onPressed: () {
                       Get.back();
@@ -37,9 +36,10 @@ class AddTask extends StatelessWidget {
                       taskController.dateController.value.text = "";
                       taskController.imageFile.value = null;
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
                       size: 30,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   )
                 ],
@@ -130,9 +130,9 @@ class AddTask extends StatelessWidget {
                   TextFormField(
                     readOnly: true,
                     controller: taskController.dateController.value,
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
                     decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.grey.shade100,
                       contentPadding: const EdgeInsets.symmetric(vertical: 5),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -148,7 +148,10 @@ class AddTask extends StatelessWidget {
                           color: Colors.grey,
                         ),
                       ),
-                      prefixIcon: const Icon(Icons.calendar_today),
+                      prefixIcon: Icon(
+                        Icons.calendar_today,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                       hintText: "Today",
                     ),
                     onTap: () {
@@ -162,28 +165,31 @@ class AddTask extends StatelessWidget {
                     children: [
                       Obx(
                         () => ChoiceChip(
-                          avatar:
-                              taskController.isSelectedPersonal.value == true
-                                  ? null
-                                  : const Icon(
-                                      Icons.radio_button_unchecked,
-                                    ),
-                          backgroundColor:
-                              Colors.cyan.shade100.withOpacity(0.2),
-                          selectedColor: Colors.cyan.shade100.withOpacity(0.2),
+                          // avatar:
+                          //     taskController.isSelectedPersonal.value == true
+                          //         ? null
+                          //         : const Icon(
+                          //             Icons.radio_button_unchecked,
+                          //           ),
+                          backgroundColor: Colors.transparent,
+                          selectedColor: Colors.cyan,
+                          showCheckmark: false,
                           side: const BorderSide(
                             width: 2,
                             color: Colors.cyan,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          label: const Text(
+                          label: Text(
                             "Personal",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Colors.cyan,
+                              color: taskController.isSelectedPersonal.value ==
+                                      true
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           selected: taskController.isSelectedPersonal.value,
@@ -194,31 +200,32 @@ class AddTask extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        width: 35,
+                        width: 15,
                       ),
                       Obx(
                         () => ChoiceChip(
-                          avatar:
-                              taskController.isSelectedBusiness.value == true
-                                  ? null
-                                  : const Icon(
-                                      Icons.radio_button_unchecked,
-                                    ),
-                          backgroundColor:
-                              Colors.purple.shade100.withOpacity(0.2),
-                          selectedColor:
-                              Colors.purple.shade100.withOpacity(0.2),
+                          // avatar:
+                          //     taskController.isSelectedBusiness.value == true
+                          //         ? null
+                          //         : const Icon(
+                          //             Icons.radio_button_unchecked,
+                          //           ),
+                          backgroundColor: Colors.transparent,
+                          showCheckmark: false,
+                          selectedColor: Colors.purple,
                           side:
                               const BorderSide(width: 2, color: Colors.purple),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          label: const Text(
+                          label: Text(
                             "Business",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Colors.purple,
+                              color: taskController.isSelectedBusiness.value
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           selected: taskController.isSelectedBusiness.value,

@@ -8,6 +8,7 @@ ThemeData lightMode = ThemeData(
     background: Colors.grey.shade100,
     primary: const Color(0xFF444444),
     secondary: Colors.grey.shade200,
+    primaryContainer: Colors.white,
   ),
   iconTheme: const IconThemeData().copyWith(
     color: const Color(0xFF444444),
@@ -85,10 +86,11 @@ ThemeData darkMode = ThemeData(
   brightness: Brightness.dark,
   useMaterial3: true,
   colorScheme: ColorScheme.dark(
-    background: Colors.grey.shade900,
-    primary: Colors.white,
-    secondary: Colors.grey.shade700,
-  ),
+      // background: Colors.grey.shade900,
+      background: const Color(0xFF3450a1),
+      primary: Colors.white,
+      secondary: Colors.grey.shade700,
+      primaryContainer: const Color(0xFF041955)),
   iconTheme: const IconThemeData().copyWith(color: Colors.white),
   primaryColor: Colors.purple,
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(

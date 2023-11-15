@@ -46,6 +46,13 @@ class TaskController extends GetxController {
 
   final taskList = RxList<TaskModel>([]);
 
+  final isLoadingSearchTask = Rx<bool>(false);
+
+  final searchTaskController =
+      Rx<TextEditingController>(TextEditingController());
+
+  final searchTask = Rx<String>("");
+
   final filterPersonal = Rx<bool>(false);
   final filterBusiness = Rx<bool>(false);
 
@@ -62,6 +69,40 @@ class TaskController extends GetxController {
   void onClose() {
     subscription?.cancel();
     super.onClose();
+  }
+
+  final searchTaskListResult = RxList<TaskModel>([]);
+
+  Future<void> handleSearchTaskToFirebase(String searchText) async {
+    try {
+      isLoadingSearchTask.value = true;
+      QuerySnapshot querySnapshot = await firebaseFirestore.value
+          .collection("tasks")
+          .where("uid", isEqualTo: firebaseAuth.value.currentUser?.uid)
+          .where("title", isGreaterThanOrEqualTo: searchText.trim())
+          .where("title", isLessThanOrEqualTo: '${searchText.trim()}\uf8ff')
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        searchTaskListResult.assignAll(querySnapshot.docs.map((doc) {
+          return TaskModel.fromJson(doc.data() as Map<String, dynamic>);
+        }).toList());
+      } else {
+        searchTaskListResult.clear();
+      }
+      isLoadingSearchTask.value = false;
+    } catch (e) {
+      isLoadingSearchTask.value = false;
+      print(e);
+      showSnackbar(message: e.toString());
+    }
+  }
+
+  void handleSearchTask(String searchText) {
+    searchTaskListResult.value = taskList
+        .where((task) =>
+            task.title!.toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
   }
 
   int countTaskTypePersonal() {

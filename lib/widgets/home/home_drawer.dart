@@ -18,6 +18,7 @@ class HomeDrawer extends StatelessWidget {
     final AuthController authController = Get.find();
     final TaskController taskController = Get.find();
     return Drawer(
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       child: ListView(
         children: [
           Container(
@@ -56,29 +57,43 @@ class HomeDrawer extends StatelessWidget {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.purple.shade200.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(12),
+                        color:
+                            profileController.currentUser.value!.isAccountVip!
+                                ? Colors.purple.shade300.withAlpha(120)
+                                : Colors.grey.shade600,
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/crown.png',
-                            width: 35,
-                            height: 35,
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          const Text(
-                            "VIP",
-                            style: TextStyle(
-                              color: Colors.purple,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child:
+                          profileController.currentUser.value!.isAccountVip! ==
+                                  true
+                              ? Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/crown.png',
+                                      width: 35,
+                                      height: 35,
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    const Text(
+                                      "VIP",
+                                      style: TextStyle(
+                                        color: Colors.purple,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : const Text(
+                                  "FREE",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                     )
                   ],
                 ),
@@ -230,6 +245,7 @@ class HomeDrawer extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: const BorderSide(
