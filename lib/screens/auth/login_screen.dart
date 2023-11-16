@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/auth_controller.dart';
-import 'package:todo_app/screens/register_screen.dart';
+import 'package:todo_app/screens/auth/auth_screen.dart';
+import 'package:todo_app/screens/auth/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -236,6 +237,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       )
                     ],
                   ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => AuthScreen());
+                      },
+                      child: Text(
+                        "Auth",
+                        style: TextStyle(color: Colors.white),
+                      )),
                 ],
               ),
             ),

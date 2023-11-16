@@ -245,9 +245,10 @@ class HomeDrawer extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                // backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                backgroundColor: const Color(0xffc62828),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(50),
                   side: const BorderSide(
                     width: 2,
                     color: Color(0xffc62828),
@@ -302,12 +303,14 @@ class HomeDrawer extends StatelessWidget {
               icon: const Icon(
                 Icons.logout,
                 size: 26,
-                color: Color(0xffc62828),
+                // color: Color(0xffc62828),
+                color: Colors.white,
               ),
               label: const Text(
                 "Log out",
                 style: TextStyle(
-                  color: Color(0xffc62828),
+                  // color: Color(0xffc62828),
+                  color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                 ),

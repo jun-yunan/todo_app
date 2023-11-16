@@ -5,7 +5,7 @@ import 'package:todo_app/controllers/task_controller.dart';
 // import 'package:todo_app/controllers/task_controller.dart';
 
 import 'package:todo_app/models/task_type_model.dart';
-import 'package:todo_app/screens/update_task.dart';
+import 'package:todo_app/screens/task/update_task.dart';
 // import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/dialog/delete_alert_dialog.dart';
 // import 'package:todo_app/widgets/task/dialog_update_task.dart';

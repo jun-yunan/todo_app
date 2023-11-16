@@ -8,12 +8,14 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/models/profile_model.dart';
 import 'package:todo_app/models/user_model.dart';
-import 'package:todo_app/screens/create_profile_screen.dart';
+import 'package:todo_app/screens/profile/create_profile_screen.dart';
 import 'package:todo_app/screens/home_screen.dart';
-import 'package:todo_app/screens/login_screen.dart';
+import 'package:todo_app/screens/auth/login_screen.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
+
+enum VARIANT { login, register }
 
 class AuthController extends GetxController {
   final profileUser = Rx<ProfileModel?>(null);
@@ -21,10 +23,16 @@ class AuthController extends GetxController {
 
   final loadingButtonController =
       Rx<RoundedLoadingButtonController>(RoundedLoadingButtonController());
+  final emailAddress = Rx<TextEditingController>(TextEditingController());
+  final password = Rx<TextEditingController>(TextEditingController());
 
   final userModel = Rx<UserModel?>(null);
 
   final isSignedIn = Rx<bool>(false);
+
+  final variant = Rx<VARIANT>(VARIANT.login);
+
+  final obscureText = Rx<bool>(false);
 
   // String? uid;
   final uid = Rx<String?>(null);
@@ -50,6 +58,11 @@ class AuthController extends GetxController {
       }
     });
     super.onInit();
+  }
+
+  void toggleObscureText() {
+    obscureText.value = !obscureText.value;
+    update();
   }
 
   //get User Real-time

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/task_controller.dart';
-import 'package:todo_app/screens/home_screen.dart';
+// import 'package:todo_app/screens/home_screen.dart';
 import 'package:todo_app/widgets/task/search_task_result.dart';
 
 class SearchTaskDialog extends StatelessWidget {
@@ -11,11 +11,10 @@ class SearchTaskDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final TaskController taskController = Get.find();
     return Dialog.fullscreen(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       child: ListView(
         children: [
-          Container(
-            color: Colors.white,
+          const SizedBox(
             height: 15,
           ),
           Row(
@@ -34,7 +33,8 @@ class SearchTaskDialog extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   padding: const EdgeInsets.symmetric(),
-                  decoration: const BoxDecoration(color: Colors.white),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.background),
                   child: TextField(
                     onChanged: (value) {
                       taskController.searchTask.value = value;
@@ -66,9 +66,8 @@ class SearchTaskDialog extends StatelessWidget {
             color: Colors.grey,
             thickness: 2,
           ),
-          Container(
+          const SizedBox(
             height: 15,
-            color: Colors.white,
           ),
           const SearchTaskResult()
         ],

@@ -4,7 +4,7 @@ import 'package:todo_app/controllers/auth_controller.dart';
 import 'package:todo_app/controllers/profile_controller.dart';
 import 'package:todo_app/controllers/task_controller.dart';
 import 'package:todo_app/controllers/theme_controller.dart';
-import 'package:todo_app/screens/add_task.dart';
+import 'package:todo_app/screens/task/add_task.dart';
 import 'package:todo_app/widgets/dialog/search_task_dialog.dart';
 import 'package:todo_app/widgets/home/home_body.dart';
 import 'package:todo_app/widgets/home/home_drawer.dart';

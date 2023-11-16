@@ -6,7 +6,7 @@ import 'package:todo_app/screens/home_screen.dart';
 // import 'package:todo_app/screens/home_screen copy.dart';
 import 'package:get/get.dart';
 // import 'package:todo_app/screens/home_screen_1.dart';
-import 'package:todo_app/screens/login_screen.dart';
+import 'package:todo_app/screens/auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
