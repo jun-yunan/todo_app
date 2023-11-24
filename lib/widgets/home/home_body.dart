@@ -23,7 +23,7 @@ class HomeBody extends StatelessWidget {
           ),
           Obx(
             () => Text(
-              "What's up, ${profileController.currentUser.value?.name?.split(" ")[1]}!",
+              "What's up, ${profileController.currentUser.value?.name}!",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,

@@ -55,44 +55,44 @@ class FirebaseApi {
     await platform?.createNotificationChannel(_androidChannel);
   }
 
-  Future initPushNotification() async {
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+  // Future initPushNotification() async {
+  //   await FirebaseMessaging.instance
+  //       .setForegroundNotificationPresentationOptions(
+  //     alert: true,
+  //     badge: true,
+  //     sound: true,
+  //   );
 
-    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  //   FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
+  //   FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+  //   FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
-    FirebaseMessaging.onMessage.listen((message) {
-      final notification = message.notification;
-      if (notification == null) return;
-      _localNotifications.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        payload: jsonEncode(message.toMap()),
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            _androidChannel.id,
-            _androidChannel.name,
-            channelDescription: _androidChannel.description,
-            icon: '@drawable/ic_launcher',
-          ),
-        ),
-      );
-    });
-  }
+  //   FirebaseMessaging.onMessage.listen((message) {
+  //     final notification = message.notification;
+  //     if (notification == null) return;
+  //     _localNotifications.show(
+  //       notification.hashCode,
+  //       notification.title,
+  //       notification.body,
+  //       payload: jsonEncode(message.toMap()),
+  //       NotificationDetails(
+  //         android: AndroidNotificationDetails(
+  //           _androidChannel.id,
+  //           _androidChannel.name,
+  //           channelDescription: _androidChannel.description,
+  //           icon: '@drawable/ic_launcher',
+  //         ),
+  //       ),
+  //     );
+  //   });
+  // }
 
   Future<void> initNotifications() async {
-    await _firebaseMessaging.requestPermission();
-    final fCMToken = await _firebaseMessaging.getToken();
-    print("Token: $fCMToken");
+    // await _firebaseMessaging.requestPermission();
+    // final fCMToken = await _firebaseMessaging.getToken();
+    // print("Token: $fCMToken");
 
-    initPushNotification();
+    // initPushNotification();
     initLocalNotification();
   }
 }

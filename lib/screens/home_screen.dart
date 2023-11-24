@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/auth_controller.dart';
+import 'package:todo_app/controllers/notification_controller.dart';
 import 'package:todo_app/controllers/profile_controller.dart';
 import 'package:todo_app/controllers/task_controller.dart';
 import 'package:todo_app/controllers/theme_controller.dart';
-import 'package:todo_app/screens/task/add_task.dart';
+// import 'package:todo_app/screens/task/add_task.dart';
+// import 'package:todo_app/screens/time_picker_screen.dart';
+// import 'package:todo_app/utils/utils.dart';
+import 'package:todo_app/widgets/dialog/create_task_dialog copy.dart';
 import 'package:todo_app/widgets/dialog/search_task_dialog.dart';
 import 'package:todo_app/widgets/home/home_body.dart';
+// import 'package:todo_app/widgets/home/home_body_task.dart';
 import 'package:todo_app/widgets/home/home_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final profileController = Get.put<ProfileController>(ProfileController());
   final authController = Get.put<AuthController>(AuthController());
   final TaskController taskController = Get.put(TaskController());
+  final NotificationController notificationsController =
+      Get.put(NotificationController());
   // final TaskController taskController = Get.find();
   // List<Widget> bodys = [
   //   Icon(Icons.home),
@@ -39,19 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        // title: Text(
-        //   "Todo App",
-        //   style: TextStyle(
-        //     fontSize: 20,
-        //     letterSpacing: 2,
-        //     foreground: Paint()
-        //       ..shader =
-        //           const LinearGradient(colors: [Colors.cyan, Colors.purple])
-        //               .createShader(
-        //         const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
-        //       ),
-        //   ),
-        // ),
         leading: IconButton(
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer();
@@ -74,7 +68,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              notificationsController.scheduleNotification(
+                id: 3,
+                title: "title",
+                body: "body",
+                payload: "payload",
+                time: DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                  16,
+                  57,
+                ),
+              );
+            },
             icon: Icon(
               Icons.notifications_outlined,
               size: 26,
@@ -84,9 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: const HomeBody(),
+      // body: const HomeBodyTask(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => const AddTask());
+          // Get.to(() => const AddTask());
+
+          Get.dialog(const CreateTaskDialog());
         },
         backgroundColor: Colors.purple,
         shape: RoundedRectangleBorder(

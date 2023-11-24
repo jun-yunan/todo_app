@@ -45,13 +45,19 @@ class AuthTextField extends StatelessWidget {
                       onPressed: () {
                         authController.toggleObscureText();
                       },
-                      icon: const Icon(Icons.visibility),
+                      icon: const Icon(
+                        Icons.visibility,
+                        color: Colors.white,
+                      ),
                     )
                   : IconButton(
                       onPressed: () {
                         authController.toggleObscureText();
                       },
-                      icon: const Icon(Icons.visibility_off),
+                      icon: const Icon(
+                        Icons.visibility_off,
+                        color: Colors.white,
+                      ),
                     ),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(width: 2, color: Colors.white),

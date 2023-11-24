@@ -45,6 +45,9 @@ dependencies:
     rounded_loading_button: ^2.1.0
     firebase_messaging: ^14.7.4
     flutter_local_notifications: ^16.1.0
+    numberpicker: ^2.1.2
+    intl: ^0.18.1
+    rxdart: ^0.27.7
 
 dev_dependencies:
     flutter_test:

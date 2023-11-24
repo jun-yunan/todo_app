@@ -6,13 +6,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:todo_app/models/category_task_model.dart';
 import 'package:todo_app/models/task_model.dart';
 // import 'package:todo_app/models/task_type_model.dart';
 // import 'package:todo_app/models/task_type_model.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/utils/utils.dart';
 // import 'package:todo_app/widgets/task/task_list.dart';
+
+enum CategoryTask { Personal, Work }
 
 class TaskController extends GetxController {
   final firebaseAuth = Rx<FirebaseAuth>(FirebaseAuth.instance);
@@ -23,6 +27,18 @@ class TaskController extends GetxController {
       Rx<RoundedLoadingButtonController>(RoundedLoadingButtonController());
 
   final taskController = Rx<TextEditingController>(TextEditingController());
+
+  final detailsTaskController =
+      Rx<TextEditingController>(TextEditingController(text: ""));
+
+  final hour = Rx<int>(int.parse(DateFormat("HH").format(DateTime.now())));
+  final minute = Rx<int>(int.parse(DateFormat('mm').format(DateTime.now())));
+  final timeFormat = Rx<String>(DateFormat('a').format(DateTime.now()));
+
+  final listCategoryTask =
+      RxList<CategoryTask>([CategoryTask.Personal, CategoryTask.Work]);
+
+  final selectedCategoryTasks = Rx<CategoryTaskType>(CategoryTaskType.Personal);
 
   final imageFile = Rx<File?>(null);
 
@@ -69,6 +85,30 @@ class TaskController extends GetxController {
   void onClose() {
     subscription?.cancel();
     super.onClose();
+  }
+
+  void setHour(value) {
+    hour.value = value;
+    update();
+  }
+
+  void setMinute(value) {
+    minute.value = value;
+    update();
+  }
+
+  void setTimeFormat(value) {
+    timeFormat.value = value;
+    update();
+  }
+
+  void resetFormCreateTask() {
+    taskController.value.text = "";
+    detailsTaskController.value.text = "";
+    selectedCategoryTasks.value = CategoryTaskType.Personal;
+    hour.value = int.parse(DateFormat("HH").format(DateTime.now()));
+    minute.value = int.parse(DateFormat('mm').format(DateTime.now()));
+    timeFormat.value = DateFormat('a').format(DateTime.now());
   }
 
   final searchTaskListResult = RxList<TaskModel>([]);
@@ -186,15 +226,16 @@ class TaskController extends GetxController {
 
   Future<void> addTask(BuildContext context) async {
     try {
-      isLoading.value = true;
-
-      if (imageFile.value != null) {
-        imageUrl.value = await uploadImage(
-            'photo_task/${DateTime.now().millisecondsSinceEpoch.toString()}');
-      }
+      // if (imageFile.value != null) {
+      //   imageUrl.value = await uploadImage(
+      //       'photo_task/${DateTime.now().millisecondsSinceEpoch.toString()}');
+      // }
 
       taskModel.value = TaskModel(
-        date: dateController.value.text,
+        // date: dateController.value.text,
+        date: DateFormat("EEE dd MM yyyy").format(DateTime.now()),
+        details: detailsTaskController.value.text,
+        time: "${hour.value}:${minute.value} ${timeFormat.value}",
         uid: firebaseAuth.value.currentUser?.uid,
         title: taskController.value.text,
         isDone: isDone.value,
@@ -202,6 +243,7 @@ class TaskController extends GetxController {
         createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
         id: "",
         fileUrl: "",
+
         taskType: isSelectedPersonal.value == true ? "personal" : "business",
       );
 
@@ -227,7 +269,7 @@ class TaskController extends GetxController {
               dateController.value.text = "";
               imageFile.value = null;
               Future.delayed(
-                const Duration(milliseconds: 100),
+                const Duration(milliseconds: 500),
                 () {
                   Navigator.of(context).pop();
                 },
@@ -254,6 +296,8 @@ class TaskController extends GetxController {
           "date": dateController.value.text,
           "taskType":
               isSelectedPersonal.value == true ? "personal" : "business",
+          "details": detailsTaskController.value.text,
+          "time": "${hour.value}:${minute.value} ${timeFormat.value}",
         }).then((value) {
           loadingButtonController.value.success();
           showSnackbar(

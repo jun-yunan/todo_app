@@ -32,6 +32,8 @@ class TaskList extends StatelessWidget {
               date: taskListPeronal[index].date ?? "",
               imageUrl: taskListPeronal[index].imageUrl ?? "",
               subtitle: taskListPeronal[index].date ?? "",
+              details: taskController.taskList[index].details ?? "",
+              time: taskController.taskList[index].time ?? "",
             );
           },
         );
@@ -55,6 +57,8 @@ class TaskList extends StatelessWidget {
               date: taskListBusiness[index].date ?? "",
               imageUrl: taskListBusiness[index].imageUrl ?? "",
               subtitle: taskListBusiness[index].date ?? "",
+              details: taskController.taskList[index].details ?? "",
+              time: taskController.taskList[index].time ?? "",
             );
           },
         );
@@ -75,6 +79,8 @@ class TaskList extends StatelessWidget {
             date: taskController.taskList[index].date ?? "",
             imageUrl: taskController.taskList[index].imageUrl ?? "",
             subtitle: taskController.taskList[index].date ?? "",
+            details: taskController.taskList[index].details ?? "",
+            time: taskController.taskList[index].time ?? "",
           );
         },
       );

@@ -8,6 +8,7 @@ import 'package:todo_app/models/task_type_model.dart';
 import 'package:todo_app/screens/task/update_task.dart';
 // import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/dialog/delete_alert_dialog.dart';
+import 'package:todo_app/widgets/dialog/edit_task_dialog.dart';
 // import 'package:todo_app/widgets/task/dialog_update_task.dart';
 
 class TaskItem extends StatelessWidget {
@@ -18,6 +19,9 @@ class TaskItem extends StatelessWidget {
   final bool isDone;
   final String date;
   final String imageUrl;
+  final String details;
+  final String time;
+
   const TaskItem({
     super.key,
     required this.taskType,
@@ -27,6 +31,8 @@ class TaskItem extends StatelessWidget {
     required this.isDone,
     required this.date,
     required this.imageUrl,
+    this.details = "",
+    this.time = "",
   });
 
   @override
@@ -39,16 +45,16 @@ class TaskItem extends StatelessWidget {
           height: 15,
         ),
         ListTile(
-          subtitle: subtitle?.isEmpty == false
-              ? Text(
-                  subtitle!,
+          subtitle: details.isEmpty
+              ? null
+              : Text(
+                  details,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: Colors.grey,
                   ),
-                )
-              : null,
+                ),
           leading: isDone
               ? IconButton(
                   onPressed: () {
@@ -83,15 +89,27 @@ class TaskItem extends StatelessWidget {
               return <PopupMenuEntry<String>>[
                 PopupMenuItem<String>(
                   onTap: () {
-                    Get.to(
-                      () => UpdateTask(
-                        id: id,
-                        date: date,
-                        imageUrl: imageUrl,
-                        taskType: taskType,
-                        title: title,
-                      ),
-                    );
+                    // Get.to(
+                    //   () => UpdateTask(
+                    //     id: id,
+                    //     date: date,
+                    //     imageUrl: imageUrl,
+                    //     taskType: taskType,
+                    //     title: title,
+                    //   ),
+                    // );
+
+                    Get.dialog(EditTaskDialog(
+                      date: date,
+                      details: details,
+                      id: id,
+                      imageUrl: imageUrl,
+                      isDone: isDone,
+                      time: time,
+                      title: title,
+                      subtitle: subtitle,
+                      taskType: taskType,
+                    ));
                   },
                   child: const ListTile(
                     leading: Icon(Icons.edit),
@@ -137,7 +155,7 @@ class TaskItem extends StatelessWidget {
               ];
             },
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 5),
+          contentPadding: const EdgeInsets.symmetric(vertical: 15),
           title: isDone
               ? Stack(
                   clipBehavior: Clip.none,

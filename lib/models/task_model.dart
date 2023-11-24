@@ -1,5 +1,7 @@
 // import 'package:todo_app/models/task_type_model.dart';
 
+// import 'package:todo_app/models/category_task_model.dart';
+
 class TaskModel {
   String? id;
   String? title;
@@ -10,6 +12,10 @@ class TaskModel {
   String? uid;
   String? createdAt;
   String? taskType;
+  String? details;
+  String? time;
+  String? categoryTask;
+  String? hexColor;
 
   TaskModel({
     this.id,
@@ -21,6 +27,10 @@ class TaskModel {
     this.uid,
     this.createdAt,
     this.taskType,
+    this.details,
+    this.time,
+    this.categoryTask,
+    this.hexColor,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) => TaskModel(
@@ -33,6 +43,10 @@ class TaskModel {
         uid: json["uid"],
         createdAt: json["createdAt"],
         taskType: json["taskType"],
+        details: json["details"],
+        time: json["time"],
+        categoryTask: json["categoryTask"],
+        hexColor: json["hexColor"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,5 +59,9 @@ class TaskModel {
         "uid": uid,
         "createdAt": createdAt,
         "taskType": taskType,
+        "details": details,
+        "time": time,
+        "categoryTask": categoryTask,
+        "hexColor": hexColor,
       };
 }

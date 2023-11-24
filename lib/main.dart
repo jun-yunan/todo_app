@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todo_app/api/firebase_api.dart';
+// import 'package:todo_app/api/firebase_api.dart';
+import 'package:todo_app/controllers/notification_controller.dart';
 import 'package:todo_app/controllers/theme_controller.dart';
 import 'package:todo_app/screens/notification_screen.dart';
 // import 'package:todo_app/screens/home_screen.dart';
@@ -15,8 +16,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseApi().initNotifications();
-  runApp(MyApp());
+  // await FirebaseApi().initNotifications();
+  await NotificationController().initLocalNotification();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

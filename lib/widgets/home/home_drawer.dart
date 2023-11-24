@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:todo_app/controllers/auth_controller.dart';
+import 'package:todo_app/controllers/new_task_controller.dart';
 import 'package:todo_app/controllers/profile_controller.dart';
 import 'package:todo_app/controllers/task_controller.dart';
 import 'package:todo_app/controllers/theme_controller.dart';
@@ -286,6 +287,7 @@ class HomeDrawer extends StatelessWidget {
                           Get.delete<TaskController>();
                           Get.delete<ProfileController>();
                           Get.delete<AuthController>();
+                          Get.delete<NewTaskController>();
                         },
                         child: const Text(
                           "Confirm",

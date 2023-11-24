@@ -8,9 +8,10 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/models/profile_model.dart';
 import 'package:todo_app/models/user_model.dart';
+import 'package:todo_app/screens/auth/auth_screen.dart';
 import 'package:todo_app/screens/profile/create_profile_screen.dart';
 import 'package:todo_app/screens/home_screen.dart';
-import 'package:todo_app/screens/auth/login_screen.dart';
+// import 'package:todo_app/screens/auth/login_screen.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
@@ -32,7 +33,7 @@ class AuthController extends GetxController {
 
   final variant = Rx<VARIANT>(VARIANT.login);
 
-  final obscureText = Rx<bool>(false);
+  final obscureText = Rx<bool>(true);
 
   // String? uid;
   final uid = Rx<String?>(null);
@@ -157,11 +158,18 @@ class AuthController extends GetxController {
           .signInWithEmailAndPassword(email: email, password: password)
           .then(
         (value) {
+          loadingButtonController.value.success();
           setSignIn();
-          Get.off(() => const HomeScreen());
+          Future.delayed(
+            const Duration(milliseconds: 500),
+            () {
+              Get.off(() => const HomeScreen());
+            },
+          );
         },
       );
     } on FirebaseAuthException catch (e) {
+      loadingButtonController.value.reset();
       if (e.code == 'user-not-found') {
         showSnackbar(message: "No user found for that email.");
         isLoading.value = false;
@@ -206,13 +214,17 @@ class AuthController extends GetxController {
               .doc(value.user?.uid)
               .set(userModel.toJson())
               .then((value) {
+            loadingButtonController.value.success();
             setSignIn();
-            Get.to(() => const CreateProfileScreen());
+            Future.delayed(const Duration(milliseconds: 500), () {
+              Get.to(() => const CreateProfileScreen());
+            });
           });
         },
       );
       // uid = userCredential.user.uid;
     } on FirebaseAuthException catch (e) {
+      loadingButtonController.value.reset();
       if (e.code == "weak-password") {
         showSnackbar(message: "The password provided is too weak.");
         isLoading.value = false;
@@ -243,9 +255,10 @@ class AuthController extends GetxController {
         await googleSignIn.signOut().then(
           (value) {
             loadingButtonController.value.success();
-            Future.delayed(const Duration(seconds: 2), () {
+            Future.delayed(const Duration(milliseconds: 500), () {
               prefs.clear();
-              Get.offAll(() => const LoginScreen());
+              // Get.offAll(() => const LoginScreen());
+              Get.offAll(() => const AuthScreen());
             });
           },
         );
@@ -253,9 +266,10 @@ class AuthController extends GetxController {
         await _auth.signOut().then(
           (value) {
             loadingButtonController.value.success();
-            Future.delayed(const Duration(seconds: 2), () {
-              prefs.clear();
-              Get.offAll(() => const LoginScreen());
+            prefs.clear();
+            Future.delayed(const Duration(milliseconds: 500), () {
+              // Get.offAll(() => const LoginScreen());
+              Get.offAll(() => const AuthScreen());
             });
           },
         );
@@ -284,8 +298,11 @@ class AuthController extends GetxController {
             (await _auth.signInWithCredential(authCredential)).user!;
 
         if (await checkUserExists(userDetails.uid)) {
-          Get.to(() => const HomeScreen());
+          loadingButtonController.value.success();
           setSignIn();
+          Future.delayed(const Duration(milliseconds: 500), () {
+            Get.to(() => const HomeScreen());
+          });
         } else {
           userModel.value = UserModel(
             uid: userDetails.uid,
@@ -307,11 +324,14 @@ class AuthController extends GetxController {
               .set(userModel.toJson())
               .then((value) {
             setSignIn();
-            Get.offAll(() => const HomeScreen());
+            Future.delayed(const Duration(milliseconds: 500), () {
+              Get.offAll(() => const HomeScreen());
+            });
           });
           update();
         }
       } on FirebaseAuthException catch (e) {
+        loadingButtonController.value.reset();
         if (e.code == "account-exists-with-different-credential") {
           showSnackbar(
             message:

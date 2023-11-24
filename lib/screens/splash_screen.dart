@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todo_app/controllers/auth_controller.dart';
+import 'package:todo_app/screens/auth/auth_screen.dart';
 // import 'package:todo_app/controllers/task_controller.dart';
 import 'package:todo_app/screens/home_screen.dart';
 // import 'package:todo_app/screens/home_screen copy.dart';
 import 'package:get/get.dart';
 // import 'package:todo_app/screens/home_screen_1.dart';
-import 'package:todo_app/screens/auth/login_screen.dart';
+// import 'package:todo_app/screens/auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -39,7 +40,8 @@ class _SplashScreenState extends State<SplashScreen>
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
+              // builder: (context) => const LoginScreen(),
+              builder: (context) => const AuthScreen(),
             ),
           );
         }
