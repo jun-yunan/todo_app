@@ -89,6 +89,7 @@ class AuthController extends GetxController {
           phoneNumber: documentSnapshot["phoneNumber"],
           isAccountVip: documentSnapshot["isAccountVip"],
           gender: documentSnapshot["gender"],
+          taskIds: documentSnapshot["taskIds"],
         );
 
         userController.add(user);
@@ -207,6 +208,7 @@ class AuthController extends GetxController {
             phoneNumber: "",
             isAccountVip: false,
             gender: "",
+            taskIds: [],
           );
 
           await firestore
@@ -317,6 +319,7 @@ class AuthController extends GetxController {
             phoneNumber: "",
             isAccountVip: false,
             gender: "",
+            taskIds: [],
           );
           await firestore
               .collection("users")

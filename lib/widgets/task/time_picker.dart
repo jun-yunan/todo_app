@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:todo_app/controllers/new_task_controller.dart';
+import 'package:todo_app/controllers/new_task_controller.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:todo_app/controllers/task_controller.dart';
 
@@ -9,15 +9,15 @@ class TimePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final NewTaskController newTaskController = Get.find();
-    final TaskController taskController = Get.find();
+    final NewTaskController newTaskController = Get.find();
+    // final TaskController taskController = Get.find();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Obx(
           () => Text(
-            "Pick your time! ${taskController.hour.value.toString().padLeft(2, "0")}:${taskController.minute.value.toString().padLeft(2, "0")} ${taskController.timeFormat.value}",
+            "Pick your time! ${newTaskController.hour.value.toString().padLeft(2, "0")}:${newTaskController.minute.value.toString().padLeft(2, "0")} ${newTaskController.timeFormat.value}",
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
@@ -38,13 +38,13 @@ class TimePicker extends StatelessWidget {
                 () => NumberPicker(
                   minValue: 0,
                   maxValue: 23,
-                  value: taskController.hour.value,
+                  value: newTaskController.hour.value,
                   zeroPad: true,
                   infiniteLoop: true,
                   itemWidth: 80,
                   itemHeight: 50,
                   onChanged: (value) {
-                    taskController.setHour(value);
+                    newTaskController.setHour(value);
                   },
                   textStyle: const TextStyle(color: Colors.grey, fontSize: 16),
                   selectedTextStyle: TextStyle(
@@ -69,13 +69,13 @@ class TimePicker extends StatelessWidget {
                 () => NumberPicker(
                   minValue: 0,
                   maxValue: 59,
-                  value: taskController.minute.value,
+                  value: newTaskController.minute.value,
                   zeroPad: true,
                   infiniteLoop: true,
                   itemWidth: 80,
                   itemHeight: 50,
                   onChanged: (value) {
-                    taskController.setMinute(value);
+                    newTaskController.setMinute(value);
                   },
                   textStyle: const TextStyle(color: Colors.grey, fontSize: 16),
                   selectedTextStyle: TextStyle(
@@ -94,7 +94,7 @@ class TimePicker extends StatelessWidget {
                   Obx(
                     () => GestureDetector(
                       onTap: () {
-                        taskController.setTimeFormat("AM");
+                        newTaskController.setTimeFormat("AM");
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -103,7 +103,7 @@ class TimePicker extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
-                          color: taskController.timeFormat.value == "AM"
+                          color: newTaskController.timeFormat.value == "AM"
                               ? Colors.grey.shade800
                               : Colors.grey.shade600,
                         ),
@@ -123,7 +123,7 @@ class TimePicker extends StatelessWidget {
                   Obx(
                     () => GestureDetector(
                       onTap: () {
-                        taskController.setTimeFormat("PM");
+                        newTaskController.setTimeFormat("PM");
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -132,7 +132,7 @@ class TimePicker extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
-                          color: taskController.timeFormat.value == "PM"
+                          color: newTaskController.timeFormat.value == "PM"
                               ? Colors.grey.shade800
                               : Colors.grey.shade600,
                         ),

@@ -1,3 +1,5 @@
+import 'package:todo_app/models/task_model.dart';
+
 class UserModel {
   String? uid;
   String? name;
@@ -12,7 +14,7 @@ class UserModel {
   bool? isAccountVip;
   String? gender;
 
-  // TypeAccount? acc;
+  List<String>? taskIds;
 
   UserModel({
     this.uid,
@@ -27,6 +29,7 @@ class UserModel {
     this.phoneNumber,
     this.isAccountVip = false,
     this.gender,
+    this.taskIds,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -42,6 +45,19 @@ class UserModel {
         phoneNumber: json["phoneNumber"],
         isAccountVip: json["isAccountVip"],
         gender: json["gender"],
+        // taskIds: List<String>.from(json["taskIds"] ?? []),
+        // taskIds: (json["taskIds"] as List<dynamic>?)
+        //         ?.map((taskId) => taskId.toString())
+        //         .toList() ??
+        //     [],
+        // taskIds: List<String>.from(json["taskIds"])
+        //     .map((taskId) => taskId.toString())
+        //     .toList(),
+
+        taskIds: (json["taskIds"] as List<dynamic>?)
+                ?.map((taskId) => taskId.toString())
+                .toList() ??
+            [],
       );
 
   Map<String, dynamic> toJson() => {
@@ -57,5 +73,7 @@ class UserModel {
         "phoneNumber": phoneNumber,
         "isAccountVip": isAccountVip,
         "gender": gender,
+        "taskIds": List<dynamic>.from(
+            taskIds?.map((taskId) => taskId.toString()).toList() ?? []),
       };
 }

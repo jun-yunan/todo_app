@@ -115,6 +115,7 @@ class ProfileController extends GetxController {
           phoneNumber: documentSnapshot["phoneNumber"],
           isAccountVip: documentSnapshot["isAccountVip"],
           gender: documentSnapshot["gender"],
+          taskIds: List<String>.from(documentSnapshot["taskIds"] ?? []),
         );
 
         userController.add(user);
@@ -123,6 +124,42 @@ class ProfileController extends GetxController {
 
     return userController.stream;
   }
+
+  // Stream<UserModel?> getCurrentUserRealTime() {
+  //   final StreamController<UserModel?> userController =
+  //       StreamController<UserModel?>.broadcast();
+
+  //   final documentStream = firebaseFirestore
+  //       .collection("users")
+  //       .doc(firebaseAuth.currentUser?.uid)
+  //       .snapshots();
+
+  //   documentStream.listen((DocumentSnapshot documentSnapshot) {
+  //     if (documentSnapshot.exists) {
+  //       final user = UserModel(
+  //         uid: documentSnapshot["uid"],
+  //         name: documentSnapshot["name"],
+  //         imageUrl: documentSnapshot["imageUrl"],
+  //         createdAt: documentSnapshot["createdAt"],
+  //         provider: documentSnapshot["provider"],
+  //         email: documentSnapshot["email"],
+  //         address: documentSnapshot["address"],
+  //         bio: documentSnapshot["bio"],
+  //         birthday: documentSnapshot["birthday"],
+  //         phoneNumber: documentSnapshot["phoneNumber"],
+  //         isAccountVip: documentSnapshot["isAccountVip"],
+  //         gender: documentSnapshot["gender"],
+  //         taskIds: List<String>.from(documentSnapshot["taskIds"] ?? []),
+  //       );
+
+  //       userController.add(user);
+  //     } else {
+  //       userController.add(null); // Trả về null nếu không có dữ liệu
+  //     }
+  //   });
+
+  //   return userController.stream;
+  // }
 
   Future<UserModel?> getCurrentUser() async {
     try {
@@ -145,6 +182,7 @@ class ProfileController extends GetxController {
           phoneNumber: documentSnapshot["phoneNumber"],
           provider: documentSnapshot["provider"],
           uid: documentSnapshot["uid"],
+          taskIds: documentSnapshot["taskIds"],
         );
       }
       return null;

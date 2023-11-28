@@ -10,8 +10,8 @@ import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/task/choice_chip_task.dart';
 import 'package:todo_app/widgets/task/time_picker.dart';
 
-class CreateTaskDialog extends StatelessWidget {
-  const CreateTaskDialog({super.key});
+class CreateTaskDialogCopy extends StatelessWidget {
+  const CreateTaskDialogCopy({super.key});
 
   @override
   Widget build(BuildContext context) {

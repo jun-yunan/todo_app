@@ -263,11 +263,11 @@ class TaskController extends GetxController {
                 message: "Add task successfully!",
                 type: SnackBarType.success,
               );
-              isLoading.value = false;
+              // isLoading.value = false;
               loadingButtonController.value.success();
-              taskController.value.text = "";
-              dateController.value.text = "";
-              imageFile.value = null;
+              // taskController.value.text = "";
+              // dateController.value.text = "";
+              // imageFile.value = null;
               Future.delayed(
                 const Duration(milliseconds: 500),
                 () {

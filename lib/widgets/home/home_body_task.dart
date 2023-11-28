@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/date_symbol_data_local.dart';
 import 'package:todo_app/controllers/new_task_controller.dart';
+import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/widgets/task_/task_item.dart';
 
 class HomeBodyTask extends StatefulWidget {
@@ -150,35 +151,82 @@ class _HomeBodyTaskState extends State<HomeBodyTask> {
           const SizedBox(
             height: 25,
           ),
-          StreamBuilder(
-            stream: newTaskController.getTaskList(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text("Error: ${snapshot.error}"),
-                );
-              }
+          // StreamBuilder(
+          //   stream: newTaskController.getTasksByUserStream(),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.connectionState == ConnectionState.waiting) {
+          //       return const Center(
+          //         child: CircularProgressIndicator(),
+          //       );
+          //     }
+          //     if (snapshot.hasError) {
+          //       return Center(
+          //         child: Text("Error: ${snapshot.error}"),
+          //       );
+          //     }
 
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: Text("No data."),
+          //     if (!snapshot.hasData) {
+          //       return const Center(
+          //         child: Text("No data."),
+          //       );
+          //     }
+          //     newTaskController.taskListByUser.assignAll(snapshot.data!);
+
+          //     return Obx(
+          //       () => ReorderableListView.builder(
+          //         shrinkWrap: true,
+          //         physics: const NeverScrollableScrollPhysics(),
+          //         itemBuilder: (context, index) {
+          //           return TaskItem(
+          //             index: index,
+          //             key: ValueKey(newTaskController.taskListByUser[index].id),
+          //           );
+          //         },
+          //         // itemCount: newTaskController.taskList.length,
+          //         itemCount: newTaskController.taskListByUser.length,
+          //         onReorder: (oldIndex, newIndex) async {
+          //           // setState(
+
+          //           if (newIndex > oldIndex) {
+          //             newIndex -= 1;
+          //           }
+          //           TaskModel movedTask =
+          //               newTaskController.taskListByUser.removeAt(oldIndex);
+          //           newTaskController.taskListByUser
+          //               .insert(newIndex, movedTask);
+          //           await newTaskController.updateTaskOrderInFirestore(
+          //               newTaskController.taskListByUser);
+          //         },
+          //       ),
+          //     );
+          //   },
+          // )
+
+          Obx(
+            () => ReorderableListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return TaskItem(
+                  index: index,
+                  key: ValueKey(newTaskController.taskListByUser[index].id),
                 );
-              }
-              newTaskController.taskList.assignAll(snapshot.data!);
-              return ListView.builder(
-                itemCount: newTaskController.taskList.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return TaskItem(index: index);
-                },
-              );
-            },
+              },
+              // itemCount: newTaskController.taskList.length,
+              itemCount: newTaskController.taskListByUser.length,
+              onReorder: (oldIndex, newIndex) async {
+                // setState(
+
+                if (newIndex > oldIndex) {
+                  newIndex -= 1;
+                }
+                TaskModel movedTask =
+                    newTaskController.taskListByUser.removeAt(oldIndex);
+                newTaskController.taskListByUser.insert(newIndex, movedTask);
+                await newTaskController.updateTaskOrderInFirestore(
+                    newTaskController.taskListByUser);
+              },
+            ),
           )
         ],
       ),
