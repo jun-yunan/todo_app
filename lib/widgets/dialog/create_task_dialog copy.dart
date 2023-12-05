@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:todo_app/controllers/new_task_controller.dart';
 import 'package:todo_app/controllers/notification_controller.dart';
@@ -18,6 +19,7 @@ class CreateTaskDialogCopy extends StatelessWidget {
     final NewTaskController newTaskController = Get.put(NewTaskController());
     final TaskController taskController = Get.find();
     final NotificationController notificationController = Get.find();
+
     return Dialog(
       child: SingleChildScrollView(
         child: Container(
@@ -137,12 +139,28 @@ class CreateTaskDialogCopy extends StatelessWidget {
                             taskController.loadingButtonController.value
                                 .reset();
                           } else if (DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                  taskController.hour.value,
-                                  taskController.minute.value)
-                              .isBefore(DateTime.now())) {
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      taskController.hour.value,
+                                      taskController.minute.value)
+                                  .isBefore(DateTime.now()) &&
+                              DateTime(
+                                int.parse(DateFormat("yyyy").format(
+                                    newTaskController.daysOfWeek[
+                                        newTaskController
+                                            .selectedDayIndex.value])),
+                                int.parse(DateFormat("MM").format(
+                                    newTaskController.daysOfWeek[
+                                        newTaskController
+                                            .selectedDayIndex.value])),
+                                int.parse(DateFormat("dd").format(
+                                    newTaskController.daysOfWeek[
+                                        newTaskController
+                                            .selectedDayIndex.value])),
+                                newTaskController.hour.value,
+                                newTaskController.minute.value,
+                              ).isBefore(DateTime.now())) {
                             showSnackbar(
                                 message:
                                     "You selected a time in the past. Please choose a time again");

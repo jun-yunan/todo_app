@@ -57,11 +57,9 @@ class NewTaskController extends GetxController {
   void onInit() async {
     // TODO: implement onInit
 
-    subscription = getTasksByUserStream().listen((event) {
-      taskListByUser.assignAll(event);
-    });
-
-    // await getTasksByUser().then((value) => taskListByUser.assignAll(value));
+    // subscription = getTasksByUserStream().listen((event) {
+    //   taskListByUser.assignAll(event);
+    // });
 
     daysOfWeek.value = getDaysOfWeek(DateTime.now());
     super.onInit();
@@ -70,7 +68,7 @@ class NewTaskController extends GetxController {
   @override
   void onClose() {
     // TODO: implement onClose
-    subscription?.cancel();
+    // subscription?.cancel();
     super.onClose();
   }
 
@@ -384,6 +382,9 @@ class NewTaskController extends GetxController {
     return firestore
         .collection("tasks")
         .where("uid", isEqualTo: firebaseAuth.currentUser?.uid)
+        .where("date",
+            isEqualTo: DateFormat('EEE dd MMMM yyyy')
+                .format(daysOfWeek[selectedDayIndex.value]))
         .orderBy("createdAt", descending: true)
         .snapshots()
         .map((querySnapshot) {
@@ -393,7 +394,19 @@ class NewTaskController extends GetxController {
     });
   }
 
-  Future<void> deleteTaskById({required String id}) async {
+  Stream<TaskModel> getTaskById(String id) {
+    return firestore
+        .collection("tasks")
+        .doc(id)
+        .snapshots()
+        .map((DocumentSnapshot documentSnapshot) {
+      return TaskModel.fromJson(
+          documentSnapshot.data() as Map<String, dynamic>);
+    });
+  }
+
+  Future<void> deleteTaskById(
+      {required BuildContext context, required String id}) async {
     try {
       await firestore.collection("tasks").doc(id).get().then((value) async {
         if (value.exists) {
@@ -416,7 +429,7 @@ class NewTaskController extends GetxController {
     }
   }
 
-  Future<void> updateTaskById(String id) async {
+  Future<void> updateTaskById(BuildContext context, String id) async {
     try {
       DocumentSnapshot documentSnapshot =
           await firestore.collection("tasks").doc(id).get();
@@ -424,7 +437,6 @@ class NewTaskController extends GetxController {
       if (documentSnapshot.exists) {
         await firestore.collection("tasks").doc(id).update({
           "title": titleTaskController.value.text,
-          // "date": dateController.value.text,
           "taskType": selectedCategoryTasks.value.name,
           "details": detailsTaskController.value.text,
           "time": "${hour.value}:${minute.value} ${timeFormat.value}",
@@ -434,6 +446,9 @@ class NewTaskController extends GetxController {
             message: "Update task successfully!",
             type: SnackBarType.success,
           );
+          Future.delayed(const Duration(milliseconds: 500), () {
+            Navigator.of(context).pop();
+          });
         });
       } else {
         showSnackbar(message: "Task does not exists.");
@@ -443,6 +458,30 @@ class NewTaskController extends GetxController {
       print(e);
       loadingButtonController.value.reset();
 
+      showSnackbar(message: e.toString());
+    }
+  }
+
+  Future<void> isDoneTaskById(String id) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await firestore.collection("tasks").doc(id).get();
+
+      if (documentSnapshot.exists) {
+        await firestore
+            .collection("tasks")
+            .doc(id)
+            .update({"isDone": true}).then((value) {
+          showSnackbar(
+            message: "🎉🎉🎉 Congratulations on completing the task.",
+            type: SnackBarType.success,
+          );
+        });
+      } else {
+        showSnackbar(message: "Task does not exist.");
+      }
+    } catch (e) {
+      print(e);
       showSnackbar(message: e.toString());
     }
   }

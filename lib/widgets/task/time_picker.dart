@@ -17,7 +17,7 @@ class TimePicker extends StatelessWidget {
       children: [
         Obx(
           () => Text(
-            "Pick your time! ${newTaskController.hour.value.toString().padLeft(2, "0")}:${newTaskController.minute.value.toString().padLeft(2, "0")} ${newTaskController.timeFormat.value}",
+            "Pick your time! ${newTaskController.hour.value.toString().padLeft(2, "0")}:${newTaskController.minute.value.toString().padLeft(2, "0")}",
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
@@ -89,65 +89,65 @@ class TimePicker extends StatelessWidget {
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  Obx(
-                    () => GestureDetector(
-                      onTap: () {
-                        newTaskController.setTimeFormat("AM");
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: newTaskController.timeFormat.value == "AM"
-                              ? Colors.grey.shade800
-                              : Colors.grey.shade600,
-                        ),
-                        child: const Text(
-                          "AM",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Obx(
-                    () => GestureDetector(
-                      onTap: () {
-                        newTaskController.setTimeFormat("PM");
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: newTaskController.timeFormat.value == "PM"
-                              ? Colors.grey.shade800
-                              : Colors.grey.shade600,
-                        ),
-                        child: const Text(
-                          "PM",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              )
+              // Column(
+              //   children: [
+              //     Obx(
+              //       () => GestureDetector(
+              //         onTap: () {
+              //           newTaskController.setTimeFormat("AM");
+              //         },
+              //         child: Container(
+              //           padding: const EdgeInsets.symmetric(
+              //             horizontal: 16,
+              //             vertical: 6,
+              //           ),
+              //           decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(100),
+              //             color: newTaskController.timeFormat.value == "AM"
+              //                 ? Colors.grey.shade800
+              //                 : Colors.grey.shade600,
+              //           ),
+              //           child: const Text(
+              //             "AM",
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //               fontSize: 18,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //     const SizedBox(
+              //       height: 10,
+              //     ),
+              //     Obx(
+              //       () => GestureDetector(
+              //         onTap: () {
+              //           newTaskController.setTimeFormat("PM");
+              //         },
+              //         child: Container(
+              //           padding: const EdgeInsets.symmetric(
+              //             horizontal: 16,
+              //             vertical: 6,
+              //           ),
+              //           decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(100),
+              //             color: newTaskController.timeFormat.value == "PM"
+              //                 ? Colors.grey.shade800
+              //                 : Colors.grey.shade600,
+              //           ),
+              //           child: const Text(
+              //             "PM",
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //               fontSize: 18,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // )
             ],
           ),
         )

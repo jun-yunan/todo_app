@@ -205,7 +205,7 @@ class EditTaskDialogCopy extends StatelessWidget {
                               .reset();
                         } else {
                           // newTaskController.createTask(context);
-                          newTaskController.updateTaskById(id);
+                          newTaskController.updateTaskById(context, id);
                         }
                       },
                       child: const Text(

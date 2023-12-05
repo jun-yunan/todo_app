@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 // import 'package:intl/date_symbol_data_local.dart';
 import 'package:todo_app/controllers/new_task_controller.dart';
-import 'package:todo_app/models/task_model.dart';
+// import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/widgets/task_/task_item.dart';
 
 class HomeBodyTask extends StatefulWidget {
@@ -16,7 +16,7 @@ class HomeBodyTask extends StatefulWidget {
 class _HomeBodyTaskState extends State<HomeBodyTask> {
   final NewTaskController newTaskController = Get.put(NewTaskController());
   int? selectedDayIndex;
-  late DateTime now; // Đổi thành late để trì hoãn việc khởi tạo
+  late DateTime now;
 
   late String currentMonthName;
 
@@ -25,19 +25,11 @@ class _HomeBodyTaskState extends State<HomeBodyTask> {
   List<DateTime> getDaysOfWeek(DateTime currentDate) {
     List<DateTime> days = [];
     int currentDayOfWeek = currentDate.weekday;
-
-    // Lặp qua 7 ngày trong tuần
     for (int i = 1; i <= 7; i++) {
-      // Tính toán số ngày chênh lệch giữa ngày hiện tại và ngày muốn lấy
       int difference = i - currentDayOfWeek;
-
-      // Tính ngày mới bằng cách thêm chênh lệch vào ngày hiện tại
       DateTime newDay = currentDate.add(Duration(days: difference));
-
-      // Thêm ngày vào danh sách
       days.add(newDay);
     }
-
     return days;
   }
 
@@ -62,7 +54,6 @@ class _HomeBodyTaskState extends State<HomeBodyTask> {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: ListView(
-        // scrollDirection: Axis.horizontal,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,8 +82,8 @@ class _HomeBodyTaskState extends State<HomeBodyTask> {
                   ),
                 ],
               ),
-              IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.filter_alt_outlined))
+              // IconButton(
+              //     onPressed: () {}, icon: const Icon(Icons.filter_alt_outlined))
             ],
           ),
           const SizedBox(
@@ -108,9 +99,12 @@ class _HomeBodyTaskState extends State<HomeBodyTask> {
                   setState(() {
                     selectedDayIndex = index;
                     newTaskController.selectedDayIndex.value = index;
-                    print(DateFormat("EEE dd MMMM yyyy").format(
+                    print(
+                      DateFormat("EEE dd MMMM yyyy").format(
                         newTaskController.daysOfWeek[
-                            newTaskController.selectedDayIndex.value]));
+                            newTaskController.selectedDayIndex.value],
+                      ),
+                    );
                   });
                 },
                 child: Container(
@@ -151,80 +145,39 @@ class _HomeBodyTaskState extends State<HomeBodyTask> {
           const SizedBox(
             height: 25,
           ),
-          // StreamBuilder(
-          //   stream: newTaskController.getTasksByUserStream(),
-          //   builder: (context, snapshot) {
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return const Center(
-          //         child: CircularProgressIndicator(),
-          //       );
-          //     }
-          //     if (snapshot.hasError) {
-          //       return Center(
-          //         child: Text("Error: ${snapshot.error}"),
-          //       );
-          //     }
-
-          //     if (!snapshot.hasData) {
-          //       return const Center(
-          //         child: Text("No data."),
-          //       );
-          //     }
-          //     newTaskController.taskListByUser.assignAll(snapshot.data!);
-
-          //     return Obx(
-          //       () => ReorderableListView.builder(
-          //         shrinkWrap: true,
-          //         physics: const NeverScrollableScrollPhysics(),
-          //         itemBuilder: (context, index) {
-          //           return TaskItem(
-          //             index: index,
-          //             key: ValueKey(newTaskController.taskListByUser[index].id),
-          //           );
-          //         },
-          //         // itemCount: newTaskController.taskList.length,
-          //         itemCount: newTaskController.taskListByUser.length,
-          //         onReorder: (oldIndex, newIndex) async {
-          //           // setState(
-
-          //           if (newIndex > oldIndex) {
-          //             newIndex -= 1;
-          //           }
-          //           TaskModel movedTask =
-          //               newTaskController.taskListByUser.removeAt(oldIndex);
-          //           newTaskController.taskListByUser
-          //               .insert(newIndex, movedTask);
-          //           await newTaskController.updateTaskOrderInFirestore(
-          //               newTaskController.taskListByUser);
-          //         },
-          //       ),
-          //     );
-          //   },
-          // )
-
           Obx(
-            () => ReorderableListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return TaskItem(
-                  index: index,
-                  key: ValueKey(newTaskController.taskListByUser[index].id),
-                );
-              },
-              // itemCount: newTaskController.taskList.length,
-              itemCount: newTaskController.taskListByUser.length,
-              onReorder: (oldIndex, newIndex) async {
-                // setState(
-
-                if (newIndex > oldIndex) {
-                  newIndex -= 1;
+            () => StreamBuilder(
+              // stream: newTaskController.getTasksByUserStream(),
+              stream: newTaskController.getTaskList(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
-                TaskModel movedTask =
-                    newTaskController.taskListByUser.removeAt(oldIndex);
-                newTaskController.taskListByUser.insert(newIndex, movedTask);
-                await newTaskController.updateTaskOrderInFirestore(
-                    newTaskController.taskListByUser);
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text("Error: ${snapshot.error}"),
+                  );
+                }
+
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: Text("No data."),
+                  );
+                }
+                newTaskController.taskListByUser.assignAll(snapshot.data!);
+                return ListView.builder(
+                  itemCount: newTaskController.taskListByUser.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return TaskItem(
+                      index: index,
+                      key: ValueKey(newTaskController.taskListByUser[index].id),
+                    );
+                  },
+                );
               },
             ),
           )

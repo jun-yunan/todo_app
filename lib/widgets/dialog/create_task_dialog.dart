@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:todo_app/controllers/new_task_controller.dart';
 import 'package:todo_app/controllers/notification_controller.dart';
-import 'package:todo_app/controllers/task_controller.dart';
+// import 'package:todo_app/controllers/task_controller.dart';
 // import 'package:todo_app/controllers/task_controller.dart';
 import 'package:todo_app/models/category_task_model.dart';
-import 'package:todo_app/models/task_model.dart';
+// import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/task/time_picker.dart';
 
@@ -16,7 +16,7 @@ class CreateTaskDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NewTaskController newTaskController = Get.put(NewTaskController());
-    final TaskController taskController = Get.find();
+    // final TaskController taskController = Get.find();
     final NotificationController notificationController = Get.find();
     return Dialog(
       child: SingleChildScrollView(
@@ -190,6 +190,33 @@ class CreateTaskDialog extends StatelessWidget {
                                     "You selected a time in the past. Please choose a time again.");
                             newTaskController.loadingButtonController.value
                                 .reset();
+                          } else if (DateTime(
+                            newTaskController
+                                .daysOfWeek[
+                                    newTaskController.selectedDayIndex.value]
+                                .year,
+                            newTaskController
+                                .daysOfWeek[
+                                    newTaskController.selectedDayIndex.value]
+                                .month,
+                            newTaskController
+                                .daysOfWeek[
+                                    newTaskController.selectedDayIndex.value]
+                                .day,
+                            newTaskController.hour.value,
+                            newTaskController.minute.value,
+                          ).isBefore(DateTime.now())) {
+                            showSnackbar(
+                                message:
+                                    "You have selected a date in the past. Please choose again");
+
+                            Future.delayed(const Duration(milliseconds: 500),
+                                () {
+                              newTaskController.loadingButtonController.value
+                                  .reset();
+                              Navigator.of(context).pop();
+                              newTaskController.resetFormCreateTask();
+                            });
                           } else {
                             await newTaskController
                                 .createTask(context)

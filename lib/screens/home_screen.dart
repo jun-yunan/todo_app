@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/auth_controller.dart';
+import 'package:todo_app/controllers/new_task_controller.dart';
 import 'package:todo_app/controllers/notification_controller.dart';
 import 'package:todo_app/controllers/profile_controller.dart';
 import 'package:todo_app/controllers/task_controller.dart';
@@ -8,10 +9,10 @@ import 'package:todo_app/controllers/theme_controller.dart';
 // import 'package:todo_app/screens/task/add_task.dart';
 // import 'package:todo_app/screens/time_picker_screen.dart';
 // import 'package:todo_app/utils/utils.dart';
-import 'package:todo_app/widgets/dialog/create_task_dialog copy.dart';
+// import 'package:todo_app/widgets/dialog/create_task_dialog copy.dart';
 import 'package:todo_app/widgets/dialog/create_task_dialog.dart';
 import 'package:todo_app/widgets/dialog/search_task_dialog.dart';
-import 'package:todo_app/widgets/home/home_body.dart';
+// import 'package:todo_app/widgets/home/home_body.dart';
 import 'package:todo_app/widgets/home/home_body_task.dart';
 import 'package:todo_app/widgets/home/home_drawer.dart';
 
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final profileController = Get.put<ProfileController>(ProfileController());
   final authController = Get.put<AuthController>(AuthController());
   final TaskController taskController = Get.put(TaskController());
+  final NewTaskController newTaskController = Get.put(NewTaskController());
   final NotificationController notificationsController =
       Get.put(NotificationController());
   // final TaskController taskController = Get.find();

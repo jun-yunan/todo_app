@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:todo_app/controllers/new_task_controller.dart';
 import 'package:todo_app/controllers/task_controller.dart';
 
 class DeleteAlertDialog extends StatelessWidget {
@@ -9,7 +10,8 @@ class DeleteAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TaskController taskController = Get.find();
+    // final TaskController taskController = Get.find();
+    final NewTaskController newTaskController = Get.find();
 
     return AlertDialog(
       title: Row(
@@ -61,7 +63,7 @@ class DeleteAlertDialog extends StatelessWidget {
         RoundedLoadingButton(
           color: Colors.red.shade600,
           successColor: Colors.green,
-          controller: taskController.loadingButtonController.value,
+          controller: newTaskController.loadingButtonController.value,
           onPressed: onPressed,
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,

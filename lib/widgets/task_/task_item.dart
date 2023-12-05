@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/new_task_controller.dart';
 import 'package:todo_app/models/category_task_model.dart';
+import 'package:todo_app/screens/task/details_task_screen.dart';
+import 'package:todo_app/utils/utils.dart';
 import 'package:todo_app/widgets/dialog/edit_task_dialog%20copy.dart';
-// import 'package:todo_app/widgets/task_/task_options.dart';
+import 'package:todo_app/widgets/task_/task_options.dart';
 // import 'package:todo_app/utils/utils.dart';
 // import 'package:todo_app/models/category_task_model.dart';
 
@@ -20,28 +22,36 @@ class TaskItem extends StatelessWidget {
     final NewTaskController newTaskController = Get.find();
     return Obx(
       () => GestureDetector(
-        // onLongPress: () {
-        //   newTaskController.isOnLongPress.value = true;
-        //   Future.delayed(const Duration(milliseconds: 500), () {
-        //     newTaskController.isOnLongPress.value = false;
+        onLongPress: () {
+          newTaskController.isOnLongPress.value = true;
+          Future.delayed(const Duration(milliseconds: 500), () {
+            newTaskController.isOnLongPress.value = false;
 
-        //     Get.dialog(const TaskOptions());
-        //   });
+            Get.dialog(TaskOptions(
+              index: index,
+            ));
+          });
+        },
+        // onTap: () {
+        //   Get.dialog(
+        //     EditTaskDialogCopy(
+        //       id: newTaskController.taskListByUser[index].id!,
+        //       title: newTaskController.taskListByUser[index].title!,
+        //       categoryTask: CategoryTaskType.values.firstWhere((element) =>
+        //           element.toString() ==
+        //           "CategoryTaskType.${newTaskController.taskListByUser[index].categoryTask!}"),
+        //       isDone: newTaskController.taskListByUser[index].isDone!,
+        //       date: newTaskController.taskListByUser[index].date!,
+        //       details: newTaskController.taskListByUser[index].details!,
+        //       time: newTaskController.taskListByUser[index].time!,
+        //     ),
+        //   );
         // },
         onTap: () {
-          Get.dialog(
-            EditTaskDialogCopy(
-              id: newTaskController.taskListByUser[index].id!,
-              title: newTaskController.taskListByUser[index].title!,
-              categoryTask: CategoryTaskType.values.firstWhere((element) =>
-                  element.toString() ==
-                  "CategoryTaskType.${newTaskController.taskListByUser[index].categoryTask!}"),
-              isDone: newTaskController.taskListByUser[index].isDone!,
-              date: newTaskController.taskListByUser[index].date!,
-              details: newTaskController.taskListByUser[index].details!,
-              time: newTaskController.taskListByUser[index].time!,
-            ),
-          );
+          // showSnackbar(message: "message");
+          Get.to(() => DetailsTaskScreen(
+                taskId: newTaskController.taskListByUser[index].id!,
+              ));
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 500),
@@ -177,6 +187,37 @@ class TaskItem extends StatelessWidget {
                   ],
                 ),
               ),
+              if (newTaskController.taskListByUser[index].isDone!)
+                Positioned(
+                  right: 15,
+                  top: 15,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.green.shade700,
+                      borderRadius: BorderRadius.circular(15000),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text(
+                          "Completed",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
             ],
           ),
         ),
